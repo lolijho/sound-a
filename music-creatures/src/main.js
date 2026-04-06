@@ -1,7 +1,7 @@
-import { AudioAnalyzer } from './AudioAnalyzer.js';
-import { Creature, Butterfly } from './Creature.js';
-import { GeometryRenderer } from './GeometryRenderer.js';
-import { DrawingRenderer } from './DrawingRenderer.js';
+import { AudioAnalyzer } from './AudioAnalyzer.js?v=4';
+import { Creature, Butterfly } from './Creature.js?v=4';
+import { GeometryRenderer } from './GeometryRenderer.js?v=4';
+import { DrawingRenderer } from './DrawingRenderer.js?v=4';
 
 // --- DOM ---
 const canvas = document.getElementById('canvas');
