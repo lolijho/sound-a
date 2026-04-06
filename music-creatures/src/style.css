@@ -145,6 +145,217 @@ body {
   letter-spacing: 0.1em;
 }
 
+/* --- Recording controls --- */
+#rec-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#format-toggle {
+  display: flex;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.format-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  padding: 8px 12px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.05em;
+}
+
+.format-btn:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.format-btn.active {
+  background: rgba(255, 210, 0, 0.12);
+  color: #ffd200;
+  text-shadow: 0 0 10px #ffd20088;
+}
+
+#btn-rec {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ff2d78;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.1em;
+}
+
+#btn-rec:hover {
+  background: rgba(255, 45, 120, 0.1);
+  border-color: #ff2d78;
+  box-shadow: 0 0 15px #ff2d7844;
+}
+
+#btn-rec.recording {
+  background: rgba(255, 45, 120, 0.2);
+  border-color: #ff2d78;
+  box-shadow: 0 0 20px #ff2d7866;
+  animation: rec-pulse 1.2s ease-in-out infinite;
+}
+
+.rec-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #ff2d78;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #ff2d78;
+}
+
+.rec-dot.blink {
+  animation: rec-blink 1s ease-in-out infinite;
+}
+
+@keyframes rec-pulse {
+  0%, 100% { box-shadow: 0 0 15px #ff2d7844; }
+  50% { box-shadow: 0 0 30px #ff2d78aa; }
+}
+
+@keyframes rec-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+/* --- Recording timer --- */
+#rec-timer {
+  position: fixed;
+  top: 70px;
+  right: 30px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid #ff2d78;
+  border-radius: 8px;
+  padding: 6px 14px;
+  pointer-events: none;
+  z-index: 20;
+}
+
+#rec-time {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #ff2d78;
+  text-shadow: 0 0 8px #ff2d7888;
+  letter-spacing: 0.1em;
+}
+
+/* --- Export overlay --- */
+#export-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+#export-panel {
+  text-align: center;
+  padding: 40px 50px;
+  border: 1px solid rgba(0, 255, 231, 0.2);
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.7);
+  box-shadow: 0 0 40px rgba(0, 255, 231, 0.1);
+}
+
+#export-panel h2 {
+  font-size: 1.2rem;
+  color: #00ffe7;
+  text-shadow: 0 0 15px #00ffe788;
+  margin-bottom: 12px;
+  letter-spacing: 0.2em;
+}
+
+#export-info {
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 24px;
+  letter-spacing: 0.08em;
+}
+
+#export-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+#btn-download {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 255, 231, 0.12);
+  border: 1px solid #00ffe7;
+  color: #00ffe7;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.1em;
+}
+
+#btn-download:hover {
+  background: rgba(0, 255, 231, 0.2);
+  box-shadow: 0 0 20px #00ffe744;
+}
+
+#btn-discard {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.4);
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.1em;
+}
+
+#btn-discard:hover {
+  color: rgba(255, 255, 255, 0.7);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* --- Canvas letterbox for recording --- */
+#canvas.letterbox {
+  width: auto;
+  height: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 @media (max-width: 600px) {
   #logo {
     font-size: 1rem;
