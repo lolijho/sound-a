@@ -2,6 +2,4 @@ version: "3.8"
 services:
   music-creatures:
     build: ./music-creatures
-    ports:
-      - "3000:80"
     restart: unless-stopped
