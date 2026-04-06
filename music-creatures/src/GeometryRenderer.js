@@ -104,14 +104,26 @@ export class GeometryRenderer {
     this.barCount = 128;
   }
 
-  onBeat(cx, cy) {
-    // Burst ring
-    this.rings.push(new Ring(cx, cy));
+  onBeat(cx, cy, canvasW, canvasH) {
+    // Spawn ring at a random position on screen
+    const rx = Math.random() * canvasW;
+    const ry = Math.random() * canvasH;
+    this.rings.push(new Ring(rx, ry));
 
-    // Burst particles
-    const count = 8 + Math.floor(Math.random() * 8);
-    for (let i = 0; i < count; i++) {
-      this.particles.push(new GeoParticle(cx, cy));
+    // Also one at center sometimes
+    if (Math.random() < 0.4) {
+      this.rings.push(new Ring(cx, cy));
+    }
+
+    // Burst particles at multiple random spots
+    const spots = 2 + Math.floor(Math.random() * 3);
+    for (let s = 0; s < spots; s++) {
+      const sx = Math.random() * canvasW;
+      const sy = Math.random() * canvasH;
+      const count = 4 + Math.floor(Math.random() * 6);
+      for (let i = 0; i < count; i++) {
+        this.particles.push(new GeoParticle(sx, sy));
+      }
     }
   }
 
@@ -140,37 +152,54 @@ export class GeometryRenderer {
     ctx.shadowBlur = 0;
   }
 
-  drawCentralPolygon(ctx, cx, cy, bass, mid) {
-    const sides = 6;
-    const baseR = 40;
-    const r = baseR + bass * 60 + mid * 20;
-    const rotation = performance.now() * 0.0003;
+  drawPolygons(ctx, canvasW, canvasH, bass, mid) {
+    const now = performance.now();
 
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(rotation);
-    ctx.beginPath();
-    for (let i = 0; i <= sides; i++) {
-      const a = (i / sides) * Math.PI * 2 - Math.PI / 2;
-      const px = Math.cos(a) * r;
-      const py = Math.sin(a) * r;
-      if (i === 0) ctx.moveTo(px, py);
-      else ctx.lineTo(px, py);
+    // Multiple polygons scattered across the screen
+    const positions = [
+      { x: canvasW * 0.5, y: canvasH * 0.5, scale: 1 },
+      { x: canvasW * 0.15, y: canvasH * 0.25, scale: 0.5 },
+      { x: canvasW * 0.85, y: canvasH * 0.2, scale: 0.45 },
+      { x: canvasW * 0.2, y: canvasH * 0.75, scale: 0.55 },
+      { x: canvasW * 0.8, y: canvasH * 0.8, scale: 0.4 },
+      { x: canvasW * 0.5, y: canvasH * 0.15, scale: 0.35 },
+    ];
+
+    const sidesArr = [6, 3, 5, 4, 7, 8];
+
+    for (let p = 0; p < positions.length; p++) {
+      const pos = positions[p];
+      const sides = sidesArr[p % sidesArr.length];
+      const baseR = 30 * pos.scale;
+      const r = baseR + bass * 50 * pos.scale + mid * 15 * pos.scale;
+      const rotation = now * (0.0002 + p * 0.00008) * (p % 2 === 0 ? 1 : -1);
+      const color = COLORS[p % COLORS.length];
+
+      ctx.save();
+      ctx.translate(pos.x, pos.y);
+      ctx.rotate(rotation);
+      ctx.beginPath();
+      for (let i = 0; i <= sides; i++) {
+        const a = (i / sides) * Math.PI * 2 - Math.PI / 2;
+        const px = Math.cos(a) * r;
+        const py = Math.sin(a) * r;
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 15 + bass * 15;
+      ctx.stroke();
+
+      ctx.globalAlpha = 0.06 + bass * 0.08;
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.shadowBlur = 0;
+      ctx.restore();
     }
-    ctx.closePath();
-    ctx.strokeStyle = '#bf5fff';
-    ctx.lineWidth = 2;
-    ctx.shadowColor = '#bf5fff';
-    ctx.shadowBlur = 20 + bass * 20;
-    ctx.stroke();
-
-    // Inner fill
-    ctx.globalAlpha = 0.08 + bass * 0.1;
-    ctx.fillStyle = '#bf5fff';
-    ctx.fill();
-    ctx.globalAlpha = 1;
-    ctx.shadowBlur = 0;
-    ctx.restore();
   }
 
   drawEffects(ctx) {

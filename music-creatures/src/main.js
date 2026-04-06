@@ -1,6 +1,7 @@
 import { AudioAnalyzer } from './AudioAnalyzer.js';
 import { Creature } from './Creature.js';
 import { GeometryRenderer } from './GeometryRenderer.js';
+import { DrawingRenderer } from './DrawingRenderer.js';
 
 // --- DOM ---
 const canvas = document.getElementById('canvas');
@@ -23,7 +24,7 @@ const btnDownload = document.getElementById('btn-download');
 const btnDiscard = document.getElementById('btn-discard');
 
 // --- State ---
-let mode = 'creature'; // 'creature' | 'geometry' | 'both'
+let mode = 'creature'; // 'creature' | 'geometry' | 'drawing' | 'both'
 let creatures = [];
 let lastTime = 0;
 let micActive = false;
@@ -47,6 +48,7 @@ const REC_RESOLUTIONS = {
 
 const analyzer = new AudioAnalyzer();
 const geoRenderer = new GeometryRenderer();
+let drawingRenderer = null;
 
 // --- Canvas resize ---
 function resize() {
@@ -57,6 +59,7 @@ function resize() {
   canvas.style.width = '';
   canvas.style.height = '';
   initCreatures();
+  drawingRenderer = new DrawingRenderer(canvas.width, canvas.height);
 }
 
 function initCreatures() {
@@ -156,6 +159,7 @@ function startRecording() {
   fitCanvasDisplay();
 
   initCreatures();
+  drawingRenderer = new DrawingRenderer(canvas.width, canvas.height);
 
   // Clear canvas to black before recording starts
   ctx.fillStyle = '#000';
@@ -328,27 +332,35 @@ function loop(timestamp) {
 
   // Only draw visuals if not fully faded
   if (fadeOutAlpha < 1) {
+    const showGeo = mode === 'geometry' || mode === 'both';
+    const showCreature = mode === 'creature' || mode === 'both';
+    const showDrawing = mode === 'drawing' || mode === 'both';
+
     // Beat events
-    if (isBeat) {
-      if (mode === 'geometry' || mode === 'both') {
-        geoRenderer.onBeat(cx, cy);
-      }
+    if (isBeat && showGeo) {
+      geoRenderer.onBeat(cx, cy, canvas.width, canvas.height);
     }
 
     // Update & draw geometry
-    if (mode === 'geometry' || mode === 'both') {
+    if (showGeo) {
       geoRenderer.update(dt);
       geoRenderer.drawBars(ctx, analyzer.freqData, canvas.width, canvas.height);
-      geoRenderer.drawCentralPolygon(ctx, cx, cy, bass, mid);
+      geoRenderer.drawPolygons(ctx, canvas.width, canvas.height, bass, mid);
       geoRenderer.drawEffects(ctx);
     }
 
     // Update & draw creatures
-    if (mode === 'creature' || mode === 'both') {
+    if (showCreature) {
       for (const c of creatures) {
         c.update(dt, bass, mid, treble, isBeat, canvas.width, canvas.height);
         c.draw(ctx, treble);
       }
+    }
+
+    // Update & draw pencil lines
+    if (showDrawing && drawingRenderer) {
+      drawingRenderer.update(dt, bass, mid, treble, isBeat, canvas.width, canvas.height);
+      drawingRenderer.draw(ctx, treble);
     }
 
     // Fade-out overlay
