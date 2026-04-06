@@ -17,73 +17,73 @@
     <div id="header">
       <h1 id="logo">MUSIC CREATURES</h1>
     </div>
+  </div>
 
-    <div id="controls">
-      <button id="btn-mic" title="Microphone">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-          <line x1="12" y1="19" x2="12" y2="23"/>
-          <line x1="8" y1="23" x2="16" y2="23"/>
-        </svg>
-        <span>MIC</span>
+  <div id="controls">
+    <button id="btn-mic" title="Microphone">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+        <line x1="12" y1="19" x2="12" y2="23"/>
+        <line x1="8" y1="23" x2="16" y2="23"/>
+      </svg>
+      <span>MIC</span>
+    </button>
+
+    <label id="btn-upload" title="Upload audio file">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/>
+        <line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+      <span>FILE</span>
+      <input type="file" id="file-input" accept="audio/mp3,audio/wav,audio/ogg,audio/*" hidden>
+    </label>
+
+    <div id="mode-toggle">
+      <button class="mode-btn active" data-mode="creature">Creature</button>
+      <button class="mode-btn" data-mode="geometry">Geometrie</button>
+      <button class="mode-btn" data-mode="drawing">Disegno</button>
+      <button class="mode-btn" data-mode="both">Entrambi</button>
+    </div>
+
+    <div id="rec-controls">
+      <div id="format-toggle">
+        <button class="format-btn active" data-format="16:9">16:9</button>
+        <button class="format-btn" data-format="9:16">9:16</button>
+      </div>
+      <button id="btn-rec" title="Start recording">
+        <span class="rec-dot"></span>
+        <span>REC</span>
       </button>
+    </div>
+  </div>
 
-      <label id="btn-upload" title="Upload audio file">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="17 8 12 3 7 8"/>
-          <line x1="12" y1="3" x2="12" y2="15"/>
-        </svg>
-        <span>FILE</span>
-        <input type="file" id="file-input" accept="audio/mp3,audio/wav,audio/ogg,audio/*" hidden>
-      </label>
+  <div id="rec-timer" class="hidden">
+    <span class="rec-dot blink"></span>
+    <span id="rec-time">00:00</span>
+  </div>
 
-      <div id="mode-toggle">
-        <button class="mode-btn active" data-mode="creature">Creature</button>
-        <button class="mode-btn" data-mode="geometry">Geometrie</button>
-        <button class="mode-btn" data-mode="drawing">Disegno</button>
-        <button class="mode-btn" data-mode="both">Entrambi</button>
-      </div>
+  <div id="status-bar">
+    <span id="status-text">Click MIC or upload a file to start</span>
+    <span id="bpm-display">-- BPM</span>
+  </div>
 
-      <div id="rec-controls">
-        <div id="format-toggle">
-          <button class="format-btn active" data-format="16:9">16:9</button>
-          <button class="format-btn" data-format="9:16">9:16</button>
-        </div>
-        <button id="btn-rec" title="Start recording">
-          <span class="rec-dot"></span>
-          <span>REC</span>
+  <div id="export-overlay" class="hidden">
+    <div id="export-panel">
+      <h2>Export Video</h2>
+      <p id="export-info"></p>
+      <div id="export-actions">
+        <button id="btn-download">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          <span>DOWNLOAD</span>
         </button>
+        <button id="btn-discard">DISCARD</button>
       </div>
-    </div>
-
-    <div id="rec-timer" class="hidden">
-      <span class="rec-dot blink"></span>
-      <span id="rec-time">00:00</span>
-    </div>
-
-    <div id="export-overlay" class="hidden">
-      <div id="export-panel">
-        <h2>Export Video</h2>
-        <p id="export-info"></p>
-        <div id="export-actions">
-          <button id="btn-download">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-              <polyline points="7 10 12 15 17 10"/>
-              <line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
-            <span>DOWNLOAD</span>
-          </button>
-          <button id="btn-discard">DISCARD</button>
-        </div>
-      </div>
-    </div>
-
-    <div id="status-bar">
-      <span id="status-text">Click MIC or upload a file to start</span>
-      <span id="bpm-display">-- BPM</span>
     </div>
   </div>
 

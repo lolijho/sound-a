@@ -313,8 +313,9 @@ function loop(timestamp) {
   const cx = canvas.width / 2;
   const cy = canvas.height / 2;
 
-  // Trail effect
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.18)';
+  // Trail effect - lighter trail for drawing mode to keep pencil lines visible
+  const trailAlpha = (mode === 'drawing') ? 0.04 : 0.18;
+  ctx.fillStyle = `rgba(0, 0, 0, ${trailAlpha})`;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // During fade-out, draw increasingly opaque black overlay
