@@ -1,5 +1,5 @@
 import { AudioAnalyzer } from './AudioAnalyzer.js';
-import { Creature } from './Creature.js';
+import { Creature, Butterfly } from './Creature.js';
 import { GeometryRenderer } from './GeometryRenderer.js';
 import { DrawingRenderer } from './DrawingRenderer.js';
 
@@ -26,6 +26,7 @@ const btnDiscard = document.getElementById('btn-discard');
 // --- State ---
 let mode = 'creature'; // 'creature' | 'geometry' | 'drawing' | 'both'
 let creatures = [];
+let butterflies = [];
 let lastTime = 0;
 let micActive = false;
 let audioSourceConnected = false;
@@ -64,8 +65,12 @@ function resize() {
 
 function initCreatures() {
   creatures = [];
+  butterflies = [];
   for (let i = 0; i < 5; i++) {
     creatures.push(new Creature(canvas.width, canvas.height));
+  }
+  for (let i = 0; i < 4; i++) {
+    butterflies.push(new Butterfly(canvas.width, canvas.height));
   }
 }
 
@@ -355,6 +360,10 @@ function loop(timestamp) {
       for (const c of creatures) {
         c.update(dt, bass, mid, treble, isBeat, canvas.width, canvas.height);
         c.draw(ctx, treble);
+      }
+      for (const b of butterflies) {
+        b.update(dt, bass, mid, treble, isBeat, canvas.width, canvas.height);
+        b.draw(ctx, treble, bass);
       }
     }
 
