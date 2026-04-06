@@ -21,6 +21,7 @@ body {
   height: 100%;
   display: block;
   z-index: 1;
+  pointer-events: none;
 }
 
 #audio-player {
